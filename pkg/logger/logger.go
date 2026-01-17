@@ -3,6 +3,7 @@ package logger
 import (
 	"log/slog"
 	"os"
+	"time"
 )
 
 // Creates a configured logger for a service
@@ -31,5 +32,13 @@ func New(serviceName, environment, level string) *slog.Logger {
 	return slog.New(handler).With(
 		slog.String("service", serviceName),
 		slog.String("environment", environment),
+	)
+}
+
+func LogDuration(logger *slog.Logger, operation string, start time.Time) {
+	duration := time.Since(start)
+	logger.Info("operation completed",
+		slog.String("operation", operation),
+		slog.Duration("duration", duration),
 	)
 }
